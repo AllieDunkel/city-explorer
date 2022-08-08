@@ -23,19 +23,19 @@ class App extends React.Component {
     this.setState({
       city: event.target.value,
     });
-  };
+  }
 
   //add getLocationData
   submitCityHandler = async (event) => {
     event.preventDefault();
     //make a request to my API
     try {
-      let URL = `https://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_CITY_KEY}&q=${this.state.city}&format=json`;
+      let URL = `http://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_CITY_KEY}&q=${this.state.city}&format=json`;
       //now lets save city results
       let cityInfo = await axios.get(URL);
       let lat = cityInfo.data[0].lat;
       let lon = cityInfo.data[0].lon;
-      let mapImage = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_CITY_KEY}&center=${cityInfo.data[0].lat},${cityInfo.data[0].lon}&zoom=13&size=1000x1000`;
+      let mapImage = `http://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_CITY_KEY}&center=${cityInfo.data[0].lat},${cityInfo.data[0].lon}&zoom=13&size=1000x1000`;
       this.setState({
         cityData: cityInfo.data[0],
         latitude: lat,
@@ -70,7 +70,8 @@ class App extends React.Component {
       });
     } catch (error) {
       this.setState({
-        map: false,
+        mapImage: false,
+        displayError: true,
         errorMessage: `An error has occured: ${error.response.status}`,
       });
     }
@@ -109,6 +110,7 @@ class App extends React.Component {
                 </Card.Text>
               </Card.Body>
             </Card>
+            <Weather weather={this.state.weather} />
             <footer>2022, Allie Dunkel</footer>
           </>
         )}
